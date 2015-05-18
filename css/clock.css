@@ -231,22 +231,24 @@ hr.timelineCal:before {
 
 
 h3.project-title {
-    line-height: 18px;
-    margin-top: 10px;
+    line-height: 19px;
+    margin-top: 5px;
     padding-top: 2px;
+    margin-bottom: 2px;
+    font-weight: 200;
 }
 p.project-description {
     margin-top: 5px;
     margin-bottom: 5px;
-    line-height: 12pt;
+    line-height: 10pt;
 }
 div.project-scan-time-left {
     margin-top: 5px;
     margin-bottom: 5px;
-    line-height: 12px;
+    line-height: 10px;
 }
 div.project-available-sessions {
-    line-height: 16px;
+    line-height: 12px;
     margin-bottom: 5px;
 }
 
