@@ -1200,10 +1200,6 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         var todayevents = jQuery('#calendar-loc').fullCalendar('clientEvents', function(event) {
                 if(event.start.isSame(today,'d')) {
                     // is this event currently going on?
-                    var col = "list-group-item-info";
-                    if (today.isAfter(event.start) && event.end.isAfter(today)) {
-	              col = "list-group-item-info";
-		    }
 		    /*jQuery('#today-list').append("<li class=\"list-group-item " + col + "\">"
                        + event.start.format('HH:mm')+"-"+event.end.format('HH:mm')
                        + " [<a href=\"mailto:" + contacts[event.user].email + "\">" + event.user + "</a> - " + event.project + "] <span class=\"text-muted\">"
@@ -1216,6 +1212,10 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         todayevents.sort(function(a,b) { return moment.parseZone(a.start).diff(moment.parseZone(b.start)); });
         for (var i = 0; i < todayevents.length; i++) {
   	   event = todayevents[i];
+           var col = "list-group-item-info";
+           if (today.isAfter(event.start) && event.end.isAfter(today)) {
+	     col = "list-group-item-info";
+	   }
 	   jQuery('#today-list').append("<li class=\"list-group-item " + col + "\">"
               + event.start.format('HH:mm')+"-"+event.end.format('HH:mm')
               + " [<a href=\"mailto:" + contacts[event.user].email + "\">" + event.user + "</a> - " + event.project + "] <span class=\"text-muted\">"
