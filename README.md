@@ -4,5 +4,7 @@ This web-page has been created for the Center for Translational Imaging and Prec
 
 ## Screenshots
 
-![application screenshot](https://github.com/HaukeBartsch/imaging-site-calendar/img/CalendarApp.png "Calendar App Screenshot")
+![application screenshot](https://github.com/HaukeBartsch/imaging-site-calendar/blob/master/img/CalendarApp.png "Calendar App Screenshot")
+
+![report screenshot](https://github.com/HaukeBartsch/imaging-site-calendar/blob/master/img/Report.png "Calendar App Screenshot for Report Page")
 
