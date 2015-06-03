@@ -257,10 +257,11 @@
           if ($p['name'] == $project) {
             $p['scantime']['current'] = $ct;
             saveProjects( $d );
-            break;
+            echo(json_encode(array("message" => "event deleted", "ok" => 1)));
+            return;
           }
         }
-        echo(json_encode(array("message" => "event deleted", "ok" => 1)));
+        echo(json_encode(array("message" => "error, could not find correct project", "ok" => 0)));
         return;
       }
     }
@@ -275,7 +276,6 @@
     $start       = $value2;
     $end         = $value3;
     $eid         = $value4;
-    audit("update event", " -> ". $scantitle. ", " . $start . ", " . $end . ", " . $project . ", " . $user_name . ", " . $eid);
 
     $d = loadProjects();
     // check if the current user is allowed to remove from this project (admin)
@@ -299,22 +299,38 @@
         // found the event, change it now
       	$event['scantitle'] = $scantitle;
         $event['start'] = $start;
-      	$event['end'] = $end;
+      	$event['end']   = $end;
+        // remember the old project in case this was changed
+        $oldProject       = $event['project'];
+        $event['project'] = $project; // now set a new project name
 
         //echo(json_encode(array("message" => "save changed events")));
         saveEvents(array_values($e)); // this removes keys from the array
 
-        $ct = getTimeSpendTimeForProject($project, $e);
-
+	// this is for the new project, but in case we have changed projects we 
+	// need to do the same for the old project (update its global time)
+        $ct = getTimeSpendTimeForProject($project, $e); 
+        
+        $changed = false;
         foreach ($d as &$p) {
           if ($p['name'] == $project) {
             $p['scantime']['current'] = $ct;
-            saveProjects( $d );
-            break;
+	    $changed = true;
+          }
+          if ($oldProject != $project && $p['name'] == $oldProject) {
+            $ct = getTimeSpendTimeForProject($oldProject, $e);
+            $p['scantime']['current'] = $ct;
+	    $changed = true;
           }
         }
-        echo(json_encode(array("message" => "event changed", "ok" => 1)));
-
+        if ($changed == true) {
+            saveProjects( $d );
+            audit("update event", " -> ". $scantitle. ", " . $start . ", " . $end . ", " . $project . ", " . $user_name . ", " . $eid);
+            echo(json_encode(array("message" => "event changed right now", "ok" => 1)));
+            return;
+        } else {
+            echo(json_encode(array("message" => "error, could not find the correct event", "ok" => 0)));
+        }
         return;
       }
     }
