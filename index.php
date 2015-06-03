@@ -278,6 +278,7 @@
                                 </div>
                                 <div class="timeline-body">
                                     <p class="text-muted">We run a GE 3T MR scanner at the University of California San Diego. Contact us if you are interested in our services.</p>
+				    <p class="text-muted">Source code and documentation for this application is available at: <a href="https://github.com/HaukeBartsch/imaging-site-calendar">https://github.com/HaukeBartsch/imaging-site-calendar</a></p>
                                 </div>
                             </div>
                         </li>
@@ -337,7 +338,7 @@
             <div class="row">
                 <div class="col-md-4">
                     <ul class="list-inline quicklinks">
-                      <li><a href="#" data-target="#about-dialog" data-toggle="modal">Copyright &copy; Hauke Bartsch 2014</a></li>
+                      <li><a href="#" data-target="#about-dialog" data-toggle="modal">Copyright &copy; Hauke Bartsch 2015</a></li>
                     </ul>
                 </div>
                 <div class="col-md-4">
