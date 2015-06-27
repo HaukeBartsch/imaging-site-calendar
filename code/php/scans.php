@@ -1,5 +1,14 @@
 <?php
 
+  #
+  # The scans.json file handeled by this script contains a list of actual scans
+  # generated on the scanner. The scanner itself is on a secure network but
+  # it runs a script (cron job) that tells our service about new scans. 
+  # In order to implement this functionality the scanner script executes a 
+  # findscu (Study level) and uses curl to call this script with the information 
+  # for new scans.
+  #
+
   $scan_file = "/data/Calendar/website/html/code/php/scans.json";
 
   function loadScans() {
