@@ -6,7 +6,42 @@
   # it runs a script (cron job) that tells our service about new scans. 
   # In order to implement this functionality the scanner script executes a 
   # findscu (Study level) and uses curl to call this script with the information 
-  # for new scans.
+  # for new scans. Here is an example for the scanner script used to add
+  # scans to this database:
+  #   #!/bin/bash
+  # 
+  #   studies=$( { findscu -aet CTIPMUCSD2 -aec CTIPMUCSD1 --study -k 0008,0052=STUDY <scanner IP> 4006; } 2>&1 )
+  #   db=/home/processing/bin/listOfStudiesDB.log
+  #   count=0
+  #   while read line; do
+  #     if [[ $line =~ ^W:\ \(0020,0010\) ]]; then
+  #       str="$patientName:$patientID:$studyDate:$studyTime:$studyInstanceUID"
+  #       # only send novel scans
+  #       grep "$studyInstanceUID" "$db"
+  #       if [[ "$?" > "0" ]]; then
+  #         /usr/bin/curl -k -G --data-urlencode "action=add" --data-urlencode "value=$str" "https://<name of calendar website>/code/php/scans.php"
+  #         echo $str >> $db
+  #       fi
+  #     fi
+  #     val=`echo $line | cut -d'[' -f2 | cut -d']' -f1`
+  #     if [[ $line =~ ^W:\ \(0008,0020\) ]]; then
+  #       studyDate=$val
+  #     fi
+  #     if [[ $line =~ ^W:\ \(0008,0030\) ]]; then
+  #       studyTime=$val
+  #     fi
+  #     if [[ $line =~ ^W:\ \(0010,0010\) ]]; then
+  #       patientName=$val
+  #     fi
+  #     if [[ $line =~ ^W:\ \(0010,0020\) ]]; then
+  #       patientID=$val
+  #     fi
+  #     if [[ $line =~ ^W:\ \(0020,000d\) ]]; then
+  #       studyInstanceUID=$val
+  #     fi
+  #
+  #     count=$(( count + 1 ))
+  #   done < <(echo "$studies")
   #
 
   $scan_file = "/data/Calendar/website/html/code/php/scans.json";
