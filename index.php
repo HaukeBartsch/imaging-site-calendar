@@ -135,6 +135,9 @@
                            <li class="divider"></li>
                            <li><a href="/code/php/logout.php">Logout</a></li>
 <?php if ($admin) : ?>
+                           <li><a id="admin-report" data-toggle="modal">Admin Report</a></li>
+<?php endif; ?>
+<?php if ($admin) : ?>
                            <li class="divider"></li>
                            <li><a href="/User/admin.php">user administration</a></li>
                            <li><a id="startChangeProject" data-toggle="modal" href="#changeProject">project administration</a></li>
@@ -441,6 +444,30 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
             </div>
         </div>
     </div>
+
+    <!-- Project Report -->
+    <div class="portfolio-modal modal fade" id="adminReport" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Admin Report</h2>
+                            <p class="item-intro text-muted">Regardless of project this report lists all scans performed on the scanner.</p>
+                            <div id="adminreport-details"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
 
     <!-- Project Report -->
     <div class="portfolio-modal modal fade" id="projectReport" tabindex="-1" role="dialog" aria-hidden="true">
@@ -1273,6 +1300,29 @@ function setTimeline(view) {
 	   removeEvent(ev);
         });
 
+        jQuery('#admin-report').on('click', function() {
+	    jQuery('#adminReport').modal('show');		
+
+            jQuery.getJSON('/code/php/scans.php', function(scans) {
+              scans.sort(function(a,b) {
+                 a.start = moment(a.StudyDate + a.StudyTime, "YYYYMMDDHHmmss");
+                 b.start = moment(b.StudyDate + b.StudyTime, "YYYYMMDDHHmmss");
+                 return moment.parseZone(a.start).diff(moment.parseZone(b.start));
+              });
+	      
+	      str = '<table id=table-admin-report class=\"report-table\">' +
+			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>SeriesInstanceUID</th></tr></thead>" +
+			    "<tbody>";
+              for (var i = 0; i < scans.length; i++) {
+		 str = str + "<tr><td>" + i + "</td><td>" + scans[i].PatientID + "</td><td>" + scans[i].PatientName + "</td><td>" +
+				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>"
+				  + scans[i].SeriesInstanceUID + "</td></tr>";
+              }
+              str = str + '</tbody></table>';
+	      jQuery('#adminreport-details').append(str);
+            });
+        });
+
         jQuery('#projectlist').on('click', '.show-report', function() {
             jQuery('#projectReport').modal('show');
 
@@ -1664,7 +1714,7 @@ function setTimeline(view) {
  
           jQuery('#setupSaveChanges').click(function() {
             jQuery.ajax({
-               url: 'getProjectSetup.php?action=save',
+               url: '/code/php/getProjectSetup.php?action=save',
                data: { "content":  editor.getValue() },
                type: 'POST',
                success: function(data){
