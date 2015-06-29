@@ -45,6 +45,7 @@
   include("code/php/AC.php");
   $user_name = check_logged(); /// function checks if visitor is logged.
   $admin = false;
+  $adminuser = false;
 
   if ($user_name == "") {
     // user is not logged in
@@ -61,6 +62,9 @@
     echo ($p."]; </script>\n");
     if (check_role( "admin" )) {
        $admin = true;
+    }
+    if ($user_name == "admin") {
+       $adminuser = true;
     }
     $can_qc = false;
     if (check_permission( "can-qc" )) {
@@ -137,7 +141,7 @@
 <?php if ($admin) : ?>
                            <li><a id="admin-report" data-toggle="modal">Admin Report</a></li>
 <?php endif; ?>
-<?php if ($admin) : ?>
+<?php if ($adminuser) : ?>
                            <li class="divider"></li>
                            <li><a href="/User/admin.php">user administration</a></li>
                            <li><a id="startChangeProject" data-toggle="modal" href="#changeProject">project administration</a></li>
@@ -1311,12 +1315,12 @@ function setTimeline(view) {
               });
 	      
 	      str = '<table id=table-admin-report class=\"report-table\">' +
-			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>SeriesInstanceUID</th></tr></thead>" +
+			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>StudyInstanceUID</th></tr></thead>" +
 			    "<tbody>";
               for (var i = 0; i < scans.length; i++) {
 		 str = str + "<tr><td>" + i + "</td><td>" + scans[i].PatientID + "</td><td>" + scans[i].PatientName + "</td><td>" +
-				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>"
-				  + scans[i].SeriesInstanceUID + "</td></tr>";
+				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>"
+				  + scans[i].StudyInstanceUID + "</td></tr>";
               }
               str = str + '</tbody></table>';
 	      jQuery('#adminreport-details').append(str);
