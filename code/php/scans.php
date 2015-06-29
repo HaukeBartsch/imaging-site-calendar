@@ -109,7 +109,7 @@
     $siuid=$vals[4];
     $studyDescription=$vals[5];
 
-    $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'SeriesInstanceUID' => $siuid, 'StudyDescription' => $studyDescription );
+    $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'StudyInstanceUID' => $siuid, 'StudyDescription' => $studyDescription );
  
     saveScans($d);
 
