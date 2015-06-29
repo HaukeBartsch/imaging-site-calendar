@@ -15,7 +15,7 @@
   #   count=0
   #   while read line; do
   #     if [[ $line =~ ^W:\ \(0020,0010\) ]]; then
-  #       str="$patientName:$patientID:$studyDate:$studyTime:$studyInstanceUID"
+  #       str="$patientName:$patientID:$studyDate:$studyTime:$studyInstanceUID:$studyDescription"
   #       # only send novel scans
   #       grep "$studyInstanceUID" "$db"
   #       if [[ "$?" > "0" ]]; then
@@ -38,6 +38,9 @@
   #     fi
   #     if [[ $line =~ ^W:\ \(0020,000d\) ]]; then
   #       studyInstanceUID=$val
+  #     fi
+  #     if [[ $line =~ ^W:\ \(0008,1030\) ]]; then
+  #       studyDescription=$val
   #     fi
   #
   #     count=$(( count + 1 ))
@@ -104,8 +107,9 @@
     $studydate=$vals[2];
     $studytime=$vals[3];
     $siuid=$vals[4];
+    $studyDescription=$vals[5];
 
-    $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'SeriesInstanceUID' => $siuid);
+    $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'SeriesInstanceUID' => $siuid, 'StudyDescription' => $studyDescription );
  
     saveScans($d);
 
