@@ -162,6 +162,11 @@
   else
     $value4 = null;
 
+  if (isset($_GET['value5']))
+    $value5 = rawurldecode($_GET['value5']);
+  else
+    $value5 = null;
+
   if (isset($_GET['start']))
     $start = rawurldecode($_GET['start']);
   else
@@ -177,6 +182,8 @@
   else {
     $project = null;
   }
+
+
 
   if ($action == "create") { // TODO: do not create anything that is in the past
     //if (!check_role( "admin" )) {
@@ -200,8 +207,8 @@
     $e = loadEvents();
     $eid = uniqid();
 
-    $e[] = array('scantitle' => $value, 'start' => $value2, 'end' => $value3, 'project' => $project, 'user' => $user_name, 'eid' => $eid);
-    audit("create event", " -> scantitle: \"". $value. "\", " . $value2 . ", " . $value3 . ", " . $project . ", " . $user_name . ", " . $eid);
+    $e[] = array('scantitle' => $value, 'start' => $value2, 'end' => $value3, 'project' => $project, 'user' => $user_name, 'eid' => $eid, 'noshow' => $value5);
+    audit("create event", " -> scantitle: \"". $value. "\", " . $value2 . ", " . $value3 . ", " . $project . ", " . $user_name . ", " . $eid. ", ". $value5);
  
     saveEvents($e);
 
@@ -276,6 +283,7 @@
     $start       = $value2;
     $end         = $value3;
     $eid         = $value4;
+    $noshow      = $value5;
 
     $d = loadProjects();
     // check if the current user is allowed to remove from this project (admin)
@@ -303,6 +311,7 @@
         // remember the old project in case this was changed
         $oldProject       = $event['project'];
         $event['project'] = $project; // now set a new project name
+        $event['noshow']  = $noshow;
 
         //echo(json_encode(array("message" => "save changed events")));
         saveEvents(array_values($e)); // this removes keys from the array
@@ -325,7 +334,7 @@
         }
         if ($changed == true) {
             saveProjects( $d );
-            audit("update event", " -> ". $scantitle. ", " . $start . ", " . $end . ", " . $project . ", " . $user_name . ", " . $eid);
+            audit("update event", " -> ". $scantitle. ", " . $start . ", " . $end . ", " . $project . ", " . $user_name . ", " . $eid. ", ". $noshow);
             echo(json_encode(array("message" => "event changed right now", "ok" => 1)));
             return;
         } else {

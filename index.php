@@ -548,20 +548,33 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                               </div>
                               <div class="form-group has-feedback">
                                 <label class="control-label col-sm-3" for="add-event-start-time">Start Time</label>
-                                <div class='input-group date' id='datetimepicker1'>
-                                    <input type='text' data-format="MM/dd/yyyy HH:mm:ss PP" id="add-event-start-time" class="form-control" />
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                                <div class="col-sm-9">
+                                  <div class='input-group date' id='datetimepicker1'>
+                                      <input type='text' data-format="MM/dd/yyyy HH:mm:ss PP" id="add-event-start-time" class="form-control" />
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                      </span>
+                                  </div>
                                 </div>
                               </div>                              
                               <div class="form-group has-feedback">
                                 <label class="control-label col-sm-3" for="add-event-end-time">End Time</label>
-                                <div class='input-group date' id='datetimepicker2'>
-                                    <input type='text' data-format="MM/dd/yyyy HH:mm:ss PP" id="add-event-end-time" class="form-control" />
-                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
-                                    </span>
+                                <div class="col-sm-9">
+                                  <div class='input-group date' id='datetimepicker2'>
+                                      <input type='text' data-format="MM/dd/yyyy HH:mm:ss PP" id="add-event-end-time" class="form-control" />
+                                      <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span>
+                                      </span>
+                                  </div>
                                 </div>
-                              </div>                             
+                              </div>
+                              <div class="form-group has-feedback">
+                                <div class="col-sm-offset-3 col-sm-9">
+				  <div class="checkbox">
+  				    <label for="add-event-noshow">
+                                       <input id="add-event-noshow" type="checkbox" value="">Patient No-Show
+                                    </label>
+                                  </div>
+                                </div>
+                              </div>
                             </form>
                             <p class="text-muted">Cancelation policy: Scan times can be canceled up to 72 hours before the scheduled time.</p>
                             <!-- <img class="img-responsive img-centered" src="img/portfolio/escape-preview.png" alt=""> -->
@@ -1032,6 +1045,8 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
       var s = cal.moment(event.start).format();
       var e = cal.moment(event.end).format();
 
+      if (event.noshow == "true")
+        jQuery('#add-event-noshow').prop('checked', true);
       jQuery('#save-event-button').attr('event-start', s);
       jQuery('#save-event-button').attr('event-end', e);
       jQuery('#datetimepicker1').data("DateTimePicker").setMinDate(new Date());
@@ -1097,7 +1112,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         var url = encodeURI('code/php/events.php?project=' + event.project + 
             '&action=create&value=' + event.scantitle + '&value2=' + 
             encodeURIComponent(s) + '&value3=' + 
-            encodeURIComponent(e));
+            encodeURIComponent(e) + '&value5=' + event.noshow);
         jQuery.getJSON(url, 
             function(data) { // returns the event id
                // alert('got something back: '+ data.message)
@@ -1161,7 +1176,8 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
             '&action=update&value=' + event.scantitle + '&value2=' + 
             encodeURIComponent(s) + '&value3=' + 
             encodeURIComponent(e) + '&value4=' + 
-            encodeURIComponent(event.eid));
+            encodeURIComponent(event.eid) + '&value5=' +
+            event.noshow);
         jQuery.getJSON(url,
             function(data) {
                // alert('got something back: '+ data.message)
@@ -1368,6 +1384,7 @@ function setTimeline(view) {
                    event.project = data[i].project;
                    event.user    = data[i].user;
                    event.eid     = data[i].eid; // event id
+	           event.noshow  = data[i].noshow;
 
 		   if (i==0) {
                      startMonth = moment(event.start).startOf('month');
@@ -1406,9 +1423,12 @@ function setTimeline(view) {
                    sum = sum + duration;
 		   sumPerMonth = sumPerMonth + duration;
 		   jQuery('#summary-'+countMonths).text(sumPerMonth);
+                   noshowstr = "";
+                   if (typeof(event.noshow) != 'undefined' && event.noshow == 'true')
+                      noshowstr = " (no-show)";
                    jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count 
                         + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
-                        + '</td><td>' + duration
+                        + '</td><td>' + duration + noshowstr
                         + '</td><td>' + event.start.format() + "<br/>" + event.end.format() 
                         + '</td><td>' + sum 
                         + '</td></tr>' );
@@ -1456,6 +1476,7 @@ function setTimeline(view) {
            ev.project = jQuery('#add-event-project-name').val();
            ev.scantitle = jQuery('#add-event-name').val();
            ev.title = ev.project + ": " + ev.scantitle;
+           ev.noshow = jQuery('#add-event-noshow').prop('checked');
            // ev.eid   = jQuery('#delete-event-button').data('eid');
 
            for (var i = 0; i < projectList.length; i++) {
