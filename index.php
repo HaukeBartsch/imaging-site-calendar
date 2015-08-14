@@ -939,7 +939,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                 '<h4>' + projects[i]['name'] + '</h4>' +
                 '<div class="swatch"><div class="c100 p'+ finished + ' small"><span>'+finished+'%</span><div class="slice"><div class="bar"></div><div class="fill"></div></div></div></div>'+
                 '<hr>' +
-                '<center>' + "<small>total usage (hours)<small><br/><div style=\"font-size: 22pt;margin-top: -10px;\">" + projects[i].scantime.current + "/" + projects[i].scantime.initial + '</div><center>' +
+                '<center>' + "<small>total usage (hours)<small><br/><div style=\"font-size: 22pt;margin-top: -10px;\">" + projects[i].scantime.current.toFixed(2) + "/" + projects[i].scantime.initial + '</div><center>' +
                 '<hr>' +
                 '<div class="portfolio-bottom"> <a href="#" class="show-report" project="'+ projects[i]['name'] +'">Show report</a>' +
                 '</div>' +
@@ -1193,7 +1193,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
     }
 
     function eventEditable( event ) {
-          // return {ok: true};
+          //return {ok: true};
         var cal = jQuery('#calendar-loc').fullCalendar('getCalendar');
         var s = cal.moment(event.start).format();
         var e = cal.moment(event.end).format();
@@ -1333,7 +1333,7 @@ function setTimeline(view) {
 	      str = '<table id=table-admin-report class=\"report-table\">' +
 			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>StudyInstanceUID</th></tr></thead>" +
 			    "<tbody>";
-              for (var i = 0; i < scans.length; i++) {
+              for (var i = scans.length-1; i >= 0; i--) {
 		 str = str + "<tr><td>" + i + "</td><td>" + scans[i].PatientID + "</td><td>" + scans[i].PatientName + "</td><td>" +
 				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>"
 				  + scans[i].StudyInstanceUID + "</td></tr>";
@@ -1389,6 +1389,7 @@ function setTimeline(view) {
 		   if (i==0) {
                      startMonth = moment(event.start).startOf('month');
 		     sumPerMonth = 0;
+		     var firstOfThisMonth = moment(event.start).startOf('month');
 		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
                                               '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
