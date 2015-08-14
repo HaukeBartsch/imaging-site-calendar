@@ -140,6 +140,7 @@
                            <li><a href="/code/php/logout.php">Logout</a></li>
 <?php if ($admin) : ?>
                            <li><a id="admin-report" data-toggle="modal">Admin Report</a></li>
+                           <li><a id="admin-report-month-overview" data-toggle="modal">Admin Report By Month</a></li>
 <?php endif; ?>
 <?php if ($adminuser) : ?>
                            <li class="divider"></li>
@@ -471,6 +472,28 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
             </div>
         </div>
     </div>
+
+    <div class="portfolio-modal modal fade" id="adminReportMonthOverview" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-content">
+            <div class="close-modal" data-dismiss="modal">
+                <div class="lr">
+                    <div class="rl">
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-lg-8 col-lg-offset-2">
+                        <div class="modal-body">
+                            <h2>Admin Report by Month</h2>
+                            <p class="item-intro text-muted">Regardless of project sort scans by study description by month.</p>
+                            <div id="adminreport-month-overview-details"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
     
 
     <!-- Project Report -->
@@ -730,6 +753,10 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
     <script src="js/d3.v3.min.js"></script>
 <?php if ($admin) : ?>
     <script src="js/ace/ace.js" type="text/javascript" charset="utf-8"></script>
+
+    <script src="//code.highcharts.com/highcharts.js"></script>
+    <script src="//code.highcharts.com/modules/exporting.js"></script>
+
 <?php endif; ?>
     <script type="text/javascript">
 
@@ -1319,6 +1346,119 @@ function setTimeline(view) {
            ev.eid   = jQuery('#delete-event-button').data('eid');
 	   removeEvent(ev);
         });
+
+        jQuery('#admin-report-month-overview').on('click', function() {
+	    jQuery('#adminReportMonthOverview').modal('show');		
+
+            jQuery.getJSON('/code/php/scans.php', function(scans) {
+              scans.sort(function(a,b) {
+                 a.start = moment(a.StudyDate + a.StudyTime, "YYYYMMDDHHmmss");
+                 b.start = moment(b.StudyDate + b.StudyTime, "YYYYMMDDHHmmss");
+                 return moment.parseZone(a.start).diff(moment.parseZone(b.start));
+              });
+
+              // how to detect the different scans
+              var listOfCategories = [ ["Cardiac", ["/cardiac/i", "/CARD/i" ]],
+			               ["Pelvis", ["/pelvis/i"]], 
+			               ["Brain", ["/brain/i"]],
+			               ["Neck", ["/neck/i"]],
+                                       ["Lumbar", ["/lumbar/i"]],
+			               ["Breast", ["/breast/i"]],
+			               ["Chest", ["/chest/i"]],
+				       ["Extremity", ["/EXTREMITY/i", "/extr/i"]],
+                                       ["Spine", ["/spine/i"]],
+			               ["Abdomen", ["/abdomen/i"]]
+			    ];
+	      str = "<div>";
+              var startMonth = moment(scans[scans.length-1].start).startOf('month');
+	      var thisMonthData = {};
+              var totalThisMonth = 0;
+              var month = 0;
+              for (var i = scans.length-1; i >= 0; i--) { // collect by month
+	         var firstOfThisMonth = moment(scans[i].start).startOf('month');
+	         if ( moment(firstOfThisMonth).diff(startMonth, 'months') !== 0  || i == 0 ) { // plot something for this month
+console.log(i);
+	            l = Object.keys(thisMonthData);
+
+                    str = str + "<br/>" + moment(startMonth).format('MMM YYYY') + ":<br/>";
+		    piedata = [];
+                    for (var j = 0; j < l.length; j++) {
+		       str = str + l[j] + ": " + thisMonthData[l[j]] + "<br/>";
+		       piedata.push( { name: l[j], y: thisMonthData[l[j]] } );
+                    }
+
+                    jQuery('#adminreport-month-overview-details').append("<div id=\"pie-"+month+"\" style=\"min-width: 410px; height: 500px; max-width: 800px; margin: 0 auto\"></div>");
+
+	            jQuery('#pie-'+month).highcharts({
+			   chart: {
+			   plotBackgroundColor: null,
+			    plotBorderWidth: null,
+			       plotShadow: false,
+			       type: 'pie'
+			   },
+			title: {
+			    text: moment(startMonth).format('MMM YYYY') + ": " + totalThisMonth
+			},
+			tooltip: {
+			    pointFormat: '{series.name}: <b>{point.percentage:.1f}%</b>'
+			},
+			plotOptions: {
+			    pie: {
+				allowPointSelect: true,
+				cursor: 'pointer',
+				dataLabels: {
+				    enabled: true,
+				    format: '<b>{point.name}</b>: {point.percentage:.1f} %',
+				    style: {
+					color: (Highcharts.theme && Highcharts.theme.contrastTextColor) || 'black'
+				    }
+				}
+			    }
+			},
+			series: [ {
+			    name: "types",
+			    colorByPoint: true,
+			    data: piedata
+			}]
+		    });
+		    totalThisMonth = 0;
+		    month = month + 1;
+   	            thisMonthData = {};
+		    startMonth = firstOfThisMonth;
+                 }
+		 // check this scan against all the possible Categories, pick the first and add
+		 var cat = "";
+	         for ( var j = 0; j < listOfCategories.length; j++) {
+		    var g = listOfCategories[j];
+		    for (var k = 0; k < g[1].length; k++) {
+                      var match = g[1][k].match(new RegExp('^/(.*?)/([gimy]*)$'));
+   	              var patt = new RegExp(match[1], match[2]);
+                      if (patt.test(scans[i].StudyDescription)) {
+                         cat = g[0];
+                         break;
+                      }
+                    }
+		    if (cat !== "") {
+			break; // only allow the first category
+                    }
+                 }
+                 if (cat == "") {
+		    cat = "unknown";
+		    console.log("Could not find category for: " + scans[i].StudyDescription);
+                 }
+
+                 totalThisMonth = totalThisMonth + 1;
+		 if (cat in thisMonthData) {
+		    thisMonthData[cat] = thisMonthData[cat] + 1;
+                 } else {
+                    thisMonthData[cat] = 1;
+                 }
+              }
+              str = str + '</div>';
+	      jQuery('#adminreport-month-overview-details').append(str);
+            });
+        });
+
 
         jQuery('#admin-report').on('click', function() {
 	    jQuery('#adminReport').modal('show');		
