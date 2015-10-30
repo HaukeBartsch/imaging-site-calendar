@@ -1074,6 +1074,8 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
 
       if (event.noshow == "true")
         jQuery('#add-event-noshow').prop('checked', true);
+      else
+        jQuery('#add-event-noshow').prop('checked', false);
       jQuery('#save-event-button').attr('event-start', s);
       jQuery('#save-event-button').attr('event-end', e);
       jQuery('#datetimepicker1').data("DateTimePicker").setMinDate(new Date());
