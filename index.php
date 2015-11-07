@@ -731,6 +731,9 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
     <script src="js/jquery-1.11.0.js"></script>
     <script src="js/jquery-ui.custom.min.js"></script>
 
+    <!-- allow users to download tables as csv and excel -->
+    <script src="js/excellentexport.min.js"></script>
+
     <!-- Bootstrap Core JavaScript -->
     <script src="js/bootstrap.min.js"></script>
 
@@ -1487,6 +1490,9 @@ console.log(i);
 				  + scans[i].StudyInstanceUID + "</td></tr>";
               }
               str = str + '</tbody></table>';
+	      str = str + '<a download="adminreport.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-admin-report\', \'Admin Report\');">Export to Excel</a>';
+	      str = str + "&nbsp;|&nbsp;";
+	      str = str + '<a download="adminreport.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-admin-report\', \'Admin Report\');">Export to CSV</a>';
 	      jQuery('#adminreport-details').append(str);
             });
         });
@@ -1543,6 +1549,10 @@ console.log(i);
 		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
                                               '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+	             str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
+	             str = str + "&nbsp;|&nbsp;";
+	             str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
+		     jQuery('#report').append(str);
                    }
                    if (event.project !== project_name)
                       continue;
@@ -1557,6 +1567,10 @@ console.log(i);
 			jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
                                                  '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+ 	                str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
+ 	                str = str + "&nbsp;|&nbsp;";
+	                str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
+		        jQuery('#report').append(str);
 			startMonth = moment(event.start).startOf('month');
                      }           
                    }
@@ -1597,6 +1611,7 @@ console.log(i);
             });
         });
 
+	// same but for all projects (not just the one from the current user)
         jQuery('#admin-report-projects').on('click', function() {
             jQuery('#projectReport').modal('show');
 
@@ -1647,6 +1662,10 @@ console.log(i);
 		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
                                               '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+	             str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
+	             str = str + "&nbsp;|&nbsp;";
+	             str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
+		     jQuery('#report').append(str);
                    }
                    //if (event.project !== project_name)
                    //   continue;
@@ -1661,6 +1680,10 @@ console.log(i);
 			jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
                                                  '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+ 	                str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
+ 	                str = str + "&nbsp;|&nbsp;";
+	                str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
+		        jQuery('#report').append(str);
 			startMonth = moment(event.start).startOf('month');
                      }           
                    }
