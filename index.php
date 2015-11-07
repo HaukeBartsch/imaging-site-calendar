@@ -1379,7 +1379,7 @@ function setTimeline(view) {
 			               ["Orbits", ["/orbit/i"]],
 			               ["WholeBody", ["/WHOLE BODY/i"]],
 			    ];
-	      str = "<div>";
+	      str = "<div><dl>";
               var startMonth = moment(scans[scans.length-1].start).startOf('month');
 	      var thisMonthData = {};
               var totalThisMonth = 0;
@@ -1390,10 +1390,16 @@ function setTimeline(view) {
 console.log(i);
 	            l = Object.keys(thisMonthData);
 
-                    str = str + "<br/>" + moment(startMonth).format('MMM YYYY') + ":<br/>";
+                    str = str + "<dt>" + moment(startMonth).format('MMM YYYY') + ":</dt>";
 		    piedata = [];
+                    // we should sort l by how many there are
+	            l.sort(function(a,b) {
+			var ax = thisMonthData[a];
+			var bx = thisMonthData[b];
+                        return (ax<bx);
+                    });
                     for (var j = 0; j < l.length; j++) {
-		       str = str + l[j] + ": " + thisMonthData[l[j]] + "<br/>";
+		       str = str + "<dd>" + l[j] + ": " + thisMonthData[l[j]] + "</dd>";
 		       piedata.push( { name: l[j], y: thisMonthData[l[j]] } );
                     }
 
@@ -1464,7 +1470,7 @@ console.log(i);
                     thisMonthData[cat] = 1;
                  }
               }
-              str = str + '</div>';
+              str = str + '</dl></div>';
 	      jQuery('#adminreport-month-overview-details').append(str);
             });
         });
