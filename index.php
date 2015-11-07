@@ -140,7 +140,8 @@
                            <li><a href="/code/php/logout.php">Logout</a></li>
 <?php if ($admin) : ?>
                            <li><a id="admin-report" data-toggle="modal">Admin Report</a></li>
-                           <li><a id="admin-report-month-overview" data-toggle="modal">Admin Report By Month</a></li>
+                           <li><a id="admin-report-month-overview" data-toggle="modal">Admin Report Summary By Month</a></li>
+                           <li><a id="admin-report-projects" data-toggle="modal">Admin Report Across Projects</a></li>
 <?php endif; ?>
 <?php if ($adminuser) : ?>
                            <li class="divider"></li>
@@ -1222,7 +1223,8 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
     }
 
     function eventEditable( event ) {
-          //return {ok: true};
+        return {ok: true}; // allow all changes
+
         var cal = jQuery('#calendar-loc').fullCalendar('getCalendar');
         var s = cal.moment(event.start).format();
         var e = cal.moment(event.end).format();
@@ -1365,11 +1367,14 @@ function setTimeline(view) {
 			               ["Brain", ["/brain/i"]],
 			               ["Neck", ["/neck/i"]],
                                        ["Lumbar", ["/lumbar/i"]],
+                                       ["Wrist", ["/wrist/i"]],
 			               ["Breast", ["/breast/i"]],
 			               ["Chest", ["/chest/i"]],
 				       ["Extremity", ["/EXTREMITY/i", "/extr/i"]],
                                        ["Spine", ["/spine/i"]],
-			               ["Abdomen", ["/abdomen/i"]]
+			               ["Abdomen", ["/abdomen|abd/i"]],
+			               ["Orbits", ["/orbit/i"]],
+			               ["WholeBody", ["/WHOLE BODY/i"]],
 			    ];
 	      str = "<div>";
               var startMonth = moment(scans[scans.length-1].start).startOf('month');
@@ -1463,7 +1468,8 @@ console.log(i);
 
 
         jQuery('#admin-report').on('click', function() {
-	    jQuery('#adminReport').modal('show');		
+	    jQuery('#adminReport').modal('show');
+	    jQuery('#adminreport-details').children().remove();
 
             jQuery.getJSON('/code/php/scans.php', function(scans) {
               scans.sort(function(a,b) {
@@ -1473,17 +1479,19 @@ console.log(i);
               });
 	      
 	      str = '<table id=table-admin-report class=\"report-table\">' +
-			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>StudyInstanceUID</th></tr></thead>" +
+			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>AccessionNumber</th><th>StudyInstanceUID</th></tr></thead>" +
 			    "<tbody>";
               for (var i = scans.length-1; i >= 0; i--) {
 		 str = str + "<tr><td>" + i + "</td><td>" + scans[i].PatientID + "</td><td>" + scans[i].PatientName + "</td><td>" +
-				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>"
+				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>" + scans[i].AccessionNumber + "</td><td>"
 				  + scans[i].StudyInstanceUID + "</td></tr>";
               }
               str = str + '</tbody></table>';
 	      jQuery('#adminreport-details').append(str);
             });
         });
+
+				     
 
         jQuery('#projectlist').on('click', '.show-report', function() {
             jQuery('#projectReport').modal('show');
@@ -1588,6 +1596,112 @@ console.log(i);
 	       
             });
         });
+
+        jQuery('#admin-report-projects').on('click', function() {
+            jQuery('#projectReport').modal('show');
+
+            var project_name = jQuery(this).attr('project');
+            var current = 0;
+            var contingent = 0;
+            for (var i = 0; i < projectList.length; i++) {
+                if (projectList[i]['name'] == project_name) {
+                    current    = projectList[i]['scantime']['current'];
+                    contingent = projectList[i]['scantime']['initial'];
+                }
+            }
+            //jQuery('.report-project-name').html("Project \"" + project_name + "\" used up "+ current + " hours. The total scan time for this project is " + contingent +" hours.");
+            
+            //jQuery.getJSON('code/php/events.php?action=list', function(data) {
+            // we need both the list of events and the actual scans taken
+	    jQuery.when( jQuery.getJSON('code/php/events.php?action=list'), jQuery.getJSON('code/php/scans.php') ).done(function(data, scans) {
+               // sort by start time
+               if (data[1] == "success")
+                  data = data[0];
+               if (scans[1] == "success")
+		  scans = scans[0];
+	       scans.sort(function(a,b) {
+		 a.start = moment(a.StudyDate + a.StudyTime, "YYYYMMDDHHmmss");
+		 b.start = moment(b.StudyDate + b.StudyTime, "YYYYMMDDHHmmss");
+                 return moment.parseZone(a.start).diff(moment.parseZone(b.start));
+               });
+               data.sort(function(a,b) { return moment.parseZone(a.start).diff(moment.parseZone(b.start)); });
+               var sum = 0; var count = 0; var crossNow = false; var sumPerMonth = 0;
+	       var startMonth; var countMonths = 0;
+               jQuery('#report').children().remove();
+               for (var i = 0; i < data.length; i++) {
+                   var event = new Object();
+                   event.scantitle = data[i].scantitle;
+                   event.title = data[i].project + ": " + data[i].scantitle;
+                   event.start = moment.parseZone(data[i].start);
+                   event.end   = moment.parseZone(data[i].end);
+                   var duration = event.end.diff(event.start, 'minutes')/60;
+                   event.project = data[i].project;
+                   event.user    = data[i].user;
+                   event.eid     = data[i].eid; // event id
+	           event.noshow  = data[i].noshow;
+
+		   if (i==0) {
+                     startMonth = moment(event.start).startOf('month');
+		     sumPerMonth = 0;
+		     var firstOfThisMonth = moment(event.start).startOf('month');
+		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
+                                              '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+                   }
+                   //if (event.project !== project_name)
+                   //   continue;
+
+                   if (i > 0) {
+		     // do we have to create a new table?
+		     var firstOfThisMonth = moment(event.start).startOf('month');
+                     if ( moment(firstOfThisMonth).diff(startMonth, 'months') !== 0 ) {
+  		        sumPerMonth = 0;
+			countMonths++;
+                        // add a new table
+			jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
+                                                 '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+			startMonth = moment(event.start).startOf('month');
+                     }           
+                   }
+
+                   if (crossNow == false && moment().diff(event.end) < 0) {
+                     crossNow = true;
+                     jQuery('#table-'+ countMonths +' tbody').append( '<tr><td></td>'
+                        + '</td><td>' + "<i>TODAY</i>"
+                        + '</td><td>'
+                        + '</td><td>' + moment().format() 
+                        + '</td><td>'
+                        + '</td></tr>' );
+                   }
+
+                   sum = sum + duration;
+		   sumPerMonth = sumPerMonth + duration;
+		   jQuery('#summary-'+countMonths).text(sumPerMonth);
+                   noshowstr = "";
+                   if (typeof(event.noshow) != 'undefined' && event.noshow == 'true')
+                      noshowstr = " (no-show)";
+                   jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count + '</td><td>' + event.project
+                        + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
+                        + '</td><td>' + duration + noshowstr
+                        + '</td><td>' + event.start.format() + "<br/>" + event.end.format() 
+                        + '</td><td>' + sum 
+                        + '</td></tr>' );
+                   // find a scan that overlaps with this time period
+                   for (var j = 0; j < scans.length; j++) {
+		      if ( scans[j].start.isAfter(event.start) && scans[j].start.isBefore(event.end) ) {
+                        jQuery("#table-" + countMonths + " tbody").append( '<tr><td style="padding: 5px;">'
+                           + '</td><td colspan="5" style="padding: 5px;">' + scans[j].start.format() + " PatientID: " + scans[j].PatientID + " PatientName: " + scans[j].PatientName + " SIUID: " + scans[j].StudyInstanceUID
+                           + '</td></tr>' );
+                      }
+                   }
+                   count = count + 1;
+               }
+	       
+            });
+        });
+
+
         jQuery('#printButton').on('click', function (event) {
           if ($('.modal').is(':visible')) {
               var modalId = $(event.target).closest('.modal').attr('id');
