@@ -571,6 +571,20 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                                 </div>
                               </div>
                               <div class="form-group has-feedback">
+                                <label class="control-label col-sm-3" for="add-event-referring">Referring Physician</label>
+                                <div class="col-sm-9">
+				  <div class="input-group">
+				     <input type="text" class="form-control" aria-label="..." id="add-event-referring">
+				     <div class="input-group-btn">
+				       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+				       <ul class="dropdown-menu dropdown-menu-right" id="referring-list">
+                                       </ul>
+				     </div>
+				   </div>
+                                   <!-- <select class="form-control projects" id="add-event-referring"></select> -->
+                                </div>
+                              </div>
+                              <div class="form-group has-feedback">
                                 <label class="control-label col-sm-3" for="add-event-start-time">Start Time</label>
                                 <div class="col-sm-9">
                                   <div class='input-group date' id='datetimepicker1'>
@@ -1036,6 +1050,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         jQuery('#delete-event-button').prop('disabled', true);
         jQuery('#datetimepicker1').prop('disabled', true);
         jQuery('#datetimepicker2').prop('disabled', true);
+        jQuery('#add-event-referring').prop('disabled', true);
         jQuery('#add-event-start-time').prop('disabled', true);
         jQuery('#add-event-end-time').prop('disabled', true);
       } else {
@@ -1046,6 +1061,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         jQuery('#delete-event-button').prop('disabled', false);
         jQuery('#datetimepicker1').prop('disabled', false);
         jQuery('#datetimepicker2').prop('disabled', false);
+        jQuery('#add-event-referring').prop('disabled', false);
         jQuery('#add-event-start-time').prop('disabled', false);
         jQuery('#add-event-end-time').prop('disabled', false);
       }
@@ -1071,6 +1087,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         }
       }
       jQuery('#add-event-project-details').val(event.user);
+      jQuery('#add-event-referring').val(event.referrer);
       
       var cal = $('#calendar-loc').fullCalendar('getCalendar');
       var s = cal.moment(event.start).format();
@@ -1109,6 +1126,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                       break;
                     }
                 }
+		event.referrer = data[i].referrer; 
                 if (!eventEditable(event).ok)
                     event.editable = false;
                 jQuery('#calendar-loc').fullCalendar('renderEvent', event, true);
@@ -1145,7 +1163,8 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         var url = encodeURI('code/php/events.php?project=' + event.project + 
             '&action=create&value=' + event.scantitle + '&value2=' + 
             encodeURIComponent(s) + '&value3=' + 
-            encodeURIComponent(e) + '&value5=' + event.noshow);
+            encodeURIComponent(e) + '&value5=' + event.noshow +
+	    '&value6=' + event.referrer);
         jQuery.getJSON(url, 
             function(data) { // returns the event id
                // alert('got something back: '+ data.message)
@@ -1210,7 +1229,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
             encodeURIComponent(s) + '&value3=' + 
             encodeURIComponent(e) + '&value4=' + 
             encodeURIComponent(event.eid) + '&value5=' +
-            event.noshow);
+            event.noshow + '&value6=' + event.referrer);
         jQuery.getJSON(url,
             function(data) {
                // alert('got something back: '+ data.message)
@@ -1329,7 +1348,13 @@ function setTimeline(view) {
        jQuery(document).ready(function() {
 	jQuery(window).resize(function() {
            updateHistogram();
-        });	
+        });
+
+	jQuery.getJSON('/code/php/getReferring.php', function( refs ) {
+	   for (var i = 0; i < refs.length; i++) {
+	      jQuery('#referring-list').append('<li><a href="#" onclick="jQuery(\'#add-event-referring\').val(\'' + refs[i] + '\');">' + refs[i] + '</a></li>');
+           }
+        });
 
         jQuery('#datetimepicker1').datetimepicker({language: 'en' });
         jQuery('#datetimepicker2').datetimepicker({language: 'en' });
@@ -1488,11 +1513,13 @@ console.log(i);
               });
 	      
 	      str = '<table id=table-admin-report class=\"report-table\">' +
-			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>AccessionNumber</th><th>StudyInstanceUID</th></tr></thead>" +
+			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>AccessionNumber</th><th>ReferringPhysician</th><th>StudyInstanceUID</th></tr></thead>" +
 			    "<tbody>";
               for (var i = scans.length-1; i >= 0; i--) {
 		 str = str + "<tr><td>" + i + "</td><td>" + scans[i].PatientID + "</td><td>" + scans[i].PatientName + "</td><td>" +
-				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>" + scans[i].AccessionNumber + "</td><td>"
+				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>" 
+				  + scans[i].AccessionNumber + "</td><td>"
+				  + scans[i].ReferringPhysician + "</td><td>"
 				  + scans[i].StudyInstanceUID + "</td></tr>";
               }
               str = str + '</tbody></table>';
@@ -1547,13 +1574,14 @@ console.log(i);
                    event.user    = data[i].user;
                    event.eid     = data[i].eid; // event id
 	           event.noshow  = data[i].noshow;
+	           event.referrer= data[i].referrer;
 
 		   if (i==0) {
                      startMonth = moment(event.start).startOf('month');
 		     sumPerMonth = 0;
 		     var firstOfThisMonth = moment(event.start).startOf('month');
 		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                              '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+                                              '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Referrer</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
 	             str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
 	             str = str + "&nbsp;|&nbsp;";
@@ -1600,7 +1628,8 @@ console.log(i);
                    jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count 
                         + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
                         + '</td><td>' + duration + noshowstr
-                        + '</td><td>' + event.start.format() + "<br/>" + event.end.format() 
+                        + '</td><td>' + event.start.format() + "<br/>" + event.end.format()
+			+ '</td><td>' + event.referrer					   
                         + '</td><td>' + sum 
                         + '</td></tr>' );
                    // find a scan that overlaps with this time period
@@ -1660,13 +1689,14 @@ console.log(i);
                    event.user    = data[i].user;
                    event.eid     = data[i].eid; // event id
 	           event.noshow  = data[i].noshow;
+		   event.referrer= data[i].referrer;
 
 		   if (i==0) {
                      startMonth = moment(event.start).startOf('month');
 		     sumPerMonth = 0;
 		     var firstOfThisMonth = moment(event.start).startOf('month');
 		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                              '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+                                              '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
 	             str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
 	             str = str + "&nbsp;|&nbsp;";
@@ -1684,7 +1714,7 @@ console.log(i);
 			countMonths++;
                         // add a new table
 			jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                                 '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+                                                 '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
 				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
  	                str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
  	                str = str + "&nbsp;|&nbsp;";
@@ -1699,6 +1729,7 @@ console.log(i);
                      jQuery('#table-'+ countMonths +' tbody').append( '<tr><td></td>'
                         + '</td><td>' + "<i>TODAY</i>"
                         + '</td><td>'
+                        + '</td><td>'
                         + '</td><td>' + moment().format() 
                         + '</td><td>'
                         + '</td></tr>' );
@@ -1712,6 +1743,7 @@ console.log(i);
                       noshowstr = " (no-show)";
                    jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count + '</td><td>' + event.project
                         + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
+			+ '</td><td>' + data[i].referrer				
                         + '</td><td>' + duration + noshowstr
                         + '</td><td>' + event.start.format() + "<br/>" + event.end.format() 
                         + '</td><td>' + sum 
@@ -1763,6 +1795,7 @@ console.log(i);
            ev.scantitle = jQuery('#add-event-name').val();
            ev.title = ev.project + ": " + ev.scantitle;
            ev.noshow = jQuery('#add-event-noshow').prop('checked');
+	   ev.referrer = jQuery('#add-event-referring').val();
            // ev.eid   = jQuery('#delete-event-button').data('eid');
 
            for (var i = 0; i < projectList.length; i++) {
@@ -1841,6 +1874,7 @@ console.log(i);
                 //jQuery('#calendar-loc').fullCalendar('renderEvent', copiedEventObject, true);
                 copiedEventObject.project = copiedEventObject.title;
                 jQuery('#add-event-name').val("");
+		jQuery('#add-event-referring').val("");
 
                 specifyEvent(copiedEventObject);                            
             },
@@ -1876,6 +1910,7 @@ console.log(i);
                 };
                 jQuery('#calendar-loc').fullCalendar('unselect');
                 jQuery('#add-event-name').val("");
+                jQuery('#add-event-referring').val("");
                 specifyEvent( eventData );
             },
             eventRender: function (event, element) {

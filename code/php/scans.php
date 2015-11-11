@@ -15,7 +15,7 @@
   #   count=0
   #   while read line; do
   #     if [[ $line =~ ^W:\ \(0020,0010\) ]]; then
-  #       str="$patientName:$patientID:$studyDate:$studyTime:$studyInstanceUID:$accessionNumber:$studyDescription"
+  #       str="$patientName:$patientID:$studyDate:$studyTime:$studyInstanceUID:$accessionNumber:$referringPhysician:$studyDescription"
   #       # only send novel scans
   #       grep "$studyInstanceUID" "$db"
   #       if [[ "$?" > "0" ]]; then
@@ -44,6 +44,9 @@
   #     fi
   #     if [[ $line =~ ^W:\ \(0008,0050\) ]]; then
   #       accessionNumber=$val
+  #     fi
+  #     if [[ $line =~ ^W:\ \(0008,0090\) ]]; then
+  #       referringPhysician=$val
   #     fi
   #
   #     count=$(( count + 1 ))
@@ -110,15 +113,24 @@
     $studydate=$vals[2];
     $studytime=$vals[3];
     $siuid=$vals[4];
-    if (count($vals) == 6) {
+    if (count($vals) == 6 ) {
        $studyDescription=$vals[5];
        $accessionNumber='unknown';
-    } else {
+       $referringPhysician='unknown';
+    } 
+    if (count($vals) == 7 ) {
        $accessionNumber=$vals[5];
        $studyDescription=$vals[6];
+       $referringPhysician='unknown';
+    }
+    if (count($vals) == 8 ) {
+       $accessionNumber=$vals[5];
+       $studyDescription=$vals[6];
+       $referringPhysician=$vals[7];  
     }
 
-    $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'StudyInstanceUID' => $siuid, 'AccessionNumber' => $accessionNumber, 'StudyDescription' => $studyDescription );
+    $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'StudyInstanceUID' => $siuid, 
+    	         'AccessionNumber' => $accessionNumber, 'ReferringPhysician' => $referringPhysician, 'StudyDescription' => $studyDescription );
  
     saveScans($d);
 
