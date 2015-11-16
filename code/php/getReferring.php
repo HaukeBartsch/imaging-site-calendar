@@ -41,6 +41,8 @@
      // lets sort the referrers alphabetically first
      sort($refs);
 
+     echo ("{ \"message\": \"save these values: " . join($refs) . "\"}");
+
      // be more careful here, we need to write first to a new file, make sure that this
      // works and copy the result over to the pw_file
      $testfn = $ref_file . '_test';
@@ -63,10 +65,11 @@
   }
   function removeReferring( $name ) {
      $d = loadReferrer();
-     if ( ! in_array($name, $d) ) {
+     if ( in_array($name, $d) == False) {
+        echo("{ \"message\": \"key ".$name." not found in list of referrers\"}"); 
         return; // nothing to do
      }
-     unset($d[$name]);
+     unset($d[array_search($name,$d)]);
      saveReferrer(array_values($d));
   }
 
