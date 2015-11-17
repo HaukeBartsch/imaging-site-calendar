@@ -172,6 +172,16 @@
   else
     $value6 = null;
 
+  if (isset($_GET['value7']))
+    $value7 = rawurldecode($_GET['value7']);
+  else
+    $value7 = null;
+
+  if (isset($_GET['value8']))
+    $value8 = rawurldecode($_GET['value8']);
+  else
+    $value8 = null;
+
   if (isset($_GET['start']))
     $start = rawurldecode($_GET['start']);
   else
@@ -212,8 +222,8 @@
     $e = loadEvents();
     $eid = uniqid();
 
-    $e[] = array('scantitle' => $value, 'start' => $value2, 'end' => $value3, 'project' => $project, 'user' => $user_name, 'eid' => $eid, 'noshow' => $value5, 'referrer' => $value6);
-    audit("create event", " -> scantitle: \"". $value. "\", " . $value2 . ", " . $value3 . ", " . $project . ", " . $user_name . ", " . $eid. ", ". $value5 .", ".$value6);
+    $e[] = array('scantitle' => $value, 'start' => $value2, 'end' => $value3, 'project' => $project, 'user' => $user_name, 'eid' => $eid, 'noshow' => $value5, 'referrer' => $value6, 'reader' => $value7, 'protocol' => $value8);
+    audit("create event", " -> scantitle: \"". $value. "\", " . $value2 . ", " . $value3 . ", " . $project . ", " . $user_name . ", " . $eid. ", ". $value5 .", ".$value6.", ".$value7.", ".$value8);
  
     saveEvents($e);
 
@@ -290,6 +300,8 @@
     $eid         = $value4;
     $noshow      = $value5;
     $referrer    = $value6;
+    $reader      = $value7;
+    $protocol    = $value8;
 
     $d = loadProjects();
     // check if the current user is allowed to remove from this project (admin)
@@ -319,6 +331,8 @@
         $event['project'] = $project; // now set a new project name
         $event['noshow']  = $noshow;
 	$event['referrer'] = $referrer;
+	$event['reader']   = $reader;
+	$event['protocol']   = $protocol;
 
         //echo(json_encode(array("message" => "save changed events")));
         saveEvents(array_values($e)); // this removes keys from the array

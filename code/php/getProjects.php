@@ -83,6 +83,11 @@
   else
     $value5 = "#FF8C00";
 
+  if (isset($_GET['value6']))
+    $value6 = urldecode($_GET['value6']);
+  else
+    $value6 = "#";
+
 
   if ($action == "create") { // create a project
     if (!check_role( "admin" )) {
@@ -96,7 +101,8 @@
                   'users' => array( $user_name ), 
                   'admin' => array( $user_name ),
                   'timeperscan' => $value4,
-                  'color' => $value5 );
+                  'color' => $value5,
+		  'irb' => $value6 );
 
     saveProjects($d);
 
@@ -111,13 +117,15 @@
     $scantimeinitial = $value3;
     $scantimecurrent = $value4;
     $color           = $value5;
+    $irb             = $value6;
 
     foreach ($d as &$project) {
        if ($name == $project['name']) {
          $project['description'] = $description;
-	       $project['scantime']['initial'] = $scantimeinitial;
-	       $project['scantime']['current'] = $scantimecurrent;
-  	     $project['color'] = $color;
+         $project['irb'] = $irb;
+	 $project['scantime']['initial'] = $scantimeinitial;
+	 $project['scantime']['current'] = $scantimecurrent;
+  	 $project['color'] = $color;
        }
     }
 
