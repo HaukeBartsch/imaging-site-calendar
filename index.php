@@ -34,6 +34,8 @@
     <link rel='stylesheet' href='css/clock.css' />
     <link rel='stylesheet' href='css/circle.css' />
 
+    <link rel='stylesheet' href='css/style.css' />
+
 
 <?php
   session_start();
@@ -585,6 +587,127 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                                 </div>
                               </div>
                               <div class="form-group has-feedback">
+                                <label class="control-label col-sm-3" for="add-event-protocol">Protocol</label>
+                                <div class="col-sm-9">
+				  <div class="input-group">
+				     <div class="input-group-btn">
+				       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+				       <ul class="dropdown-menu dropdown-menu-right multi-level" role="menu" id="protocol-list">
+					  <li class="dropdown-submenu">
+                                             <a tabindex="-1" href="#">Cardiovascular</a>
+                                             <ul class="dropdown-menu">
+                                                <li><a class="protocol-selection" href="#">MRA Thoracic Outlet + MRI Brachial Plexus</a></li>
+                                                <li><a class="protocol-selection" href="#">MRA Pulmonary Vein Flow</a></li>
+                                                <li><a class="protocol-selection" href="#">MRI/MRA Pelvis Fibroid Pre-UAE</a></li>
+						<li class="dropdown-submenu">
+						  <a tabindex="-1" href="#">Cardiac Exams</a>
+						  <ul class="dropdown-menu">
+                                                    <li><a class="protocol-selection" href="#">MRI Congenital Heart Flow</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI Congenital Heart Flow with MRA</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI Structural Heart (Valves) Flow</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI Pulmonary Hypertension with MRA</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI Cardiac Function and Viability</a></li>
+						  </ul>
+						</li>
+						<li class="dropdown-submenu">
+						  <a tabindex="-1" href="#">Vascular Exams</a>
+						  <ul class="dropdown-menu">
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Pulmonary Artery Perfusion</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRA Thoracic Aortic Flow</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRA Abdomen Flow</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRA Pelvis Flow</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRA Pelvis-Lower Extremity Flow</a></li>
+						  </ul>
+						</li>
+						<li class="dropdown-submenu">
+						  <a tabindex="-1" href="#">Rheumatologic Exams</a>
+						  <ul class="dropdown-menu">
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Chest Vasculitis</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Abdomen Vasculitis</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Pelvis Vasculitis</a></li>
+						  </ul>
+						</li>
+						<li class="dropdown-submenu">
+						  <a tabindex="-1" href="#">Gynecologic Exams</a>
+						  <ul class="dropdown-menu">
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Pelvic Congestion</a></li>
+						  </ul>
+						</li>
+						<li class="dropdown-submenu">
+						  <a tabindex="-1" href="#">Abdominal Exams</a>
+						  <ul class="dropdown-menu">
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Liver Portal Hypertension</a></li>
+                                                    <li><a class="protocol-selection" href="#">MRI/MRA Renal Hypertension</a></li>
+						  </ul>
+						</li>
+                                             </ul>
+                                          </li>                             
+					  <li class="dropdown-submenu">
+                                             <a tabindex="-1" href="#">Head</a>
+                                             <ul class="dropdown-menu">
+                                                <li><a class="protocol-selection" href="#">General Brain</a></li>
+                                             </ul>
+                                          </li>
+                                          <li><a class="protocol-selection" href="#">Breast</a></li>
+ 					  <li class="dropdown-submenu">
+                                             <a tabindex="-1" href="#">Pelvis</a>
+                                             <ul class="dropdown-menu">
+                                                <li class="dropdown-submenu">
+                                                   <a tabindex="-1" href="#">Male</a>
+                                                   <ul class="dropdown-menu">
+                                                     <li><a class="protocol-selection" href="#">RSI Pelvis</a></li>
+						   </ul>
+						</li>
+                                                <li class="dropdown-submenu">
+                                                   <a tabindex="-1" href="#">Female</a>
+                                                   <ul class="dropdown-menu">
+                                                     <li><a class="protocol-selection" href="#">RSI Female Pelvis</a></li>
+						   </ul>
+						</li>
+                                                <li><a class="protocol-selection" href="#">General Pelvis</a></li>
+                                             </ul>
+                                          </li>                             
+					  <li><a class="protocol-selection" href="#">Whole Body</a></li>
+                                       </ul>
+				     </div>
+				     <input type="text" class="form-control" aria-label="..." id="add-event-protocol">
+				   </div>
+                                </div>
+                              </div>
+                              <div class="form-group has-feedback">
+                                <label class="control-label col-sm-3" for="add-event-notes">Protocol Notes</label>
+                                <div class="col-sm-9">
+				  <div class="input-group">
+				     <input type="text" class="form-control" aria-label="..." id="add-event-notes">
+				     <div class="input-group-btn">
+				       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+				       <ul class="dropdown-menu dropdown-menu-right" id="notes-list">
+                                       </ul>
+				     </div>
+				   </div>
+                                   <!-- <select class="form-control projects" id="add-event-referring"></select> -->
+                                </div>
+                              </div>
+                              <div class="form-group has-feedback">
+                                <label class="control-label col-sm-3" for="add-event-section" title="Responsible study section">Section</label>
+                                <div class="col-sm-9">
+				  <div class="input-group">
+				     <div class="input-group-btn">
+				       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+				       <ul class="dropdown-menu dropdown-menu-right multi-level" role="menu" id="section-list">
+					  <li><a class="section-selection" href="#">Cardiovascular</a></li>
+					  <li><a class="section-selection" href="#">MSK</a></li>
+					  <li><a class="section-selection" href="#">Abdomen/Pelvis</a></li>
+					  <li><a class="section-selection" href="#">Breast</a></li>
+					  <li><a class="section-selection" href="#">Head</a></li>
+					  <li><a class="section-selection" href="#">WholeBody</a></li>
+				       </ul>
+				     </div>
+				     <input type="text" class="form-control" aria-label="..." id="add-event-section">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group has-feedback">
                                 <label class="control-label col-sm-3" for="add-event-start-time">Start Time</label>
                                 <div class="col-sm-9">
                                   <div class='input-group date' id='datetimepicker1'>
@@ -594,7 +717,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                                   </div>
                                 </div>
                               </div>                              
-                              <div class="form-group has-feedback">
+                              <div class="form-group has-feedback" id="display-end-time">
                                 <label class="control-label col-sm-3" for="add-event-end-time">End Time</label>
                                 <div class="col-sm-9">
                                   <div class='input-group date' id='datetimepicker2'>
@@ -609,6 +732,11 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
 				  <div class="checkbox">
   				    <label for="add-event-noshow">
                                        <input id="add-event-noshow" type="checkbox" value="">Patient No-Show
+                                    </label>
+                                  </div>
+				  <div class="checkbox" style="display: none;">
+  				    <label for="add-event-fullday">
+                                       <input id="add-event-fullday" type="checkbox" value="">full day
                                     </label>
                                   </div>
                                 </div>
@@ -693,6 +821,10 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                                 <input type="text" class="form-control" id="project-description" placeholder="Short Description">
                               </div>
                               <div class="form-group">
+                                <label for="description" title="Institutional Review Board">IRB protocol</label>
+                                <input type="text" class="form-control" id="project-irbprotocol" placeholder="#">
+                              </div>
+                              <div class="form-group">
                                 <label for="description">Time per scan (minutes)</label>
                                 <input type="number" class="form-control" id="project-scan-duration" placeholder="45">
                               </div>
@@ -738,12 +870,51 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         </div>
     </div>
 
+<!-- Save a referrer -->
+<div class="modal fade" id="save-new-referrer" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Save a new referrer name</h4>
+      </div>
+      <div class="modal-body">
+        The name of this referrer is not known. Do you want to add this name to the list of known referrers?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="var n=jQuery('#add-event-referring').val(); jQuery.get('/code/php/getReferring.php?action=create&value='+n, function() {reloadReferring();});">Add Referrer</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Save a notes -->
+<div class="modal fade" id="save-new-notes" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="myModalLabel">Save a new notes name</h4>
+      </div>
+      <div class="modal-body">
+        The name of this notes is not known. Do you want to add this name to the list of known notess?
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal" onclick="var n=jQuery('#add-event-notes').val(); jQuery.get('/code/php/getNotes.php?action=create&value='+n, function() {reloadNotes();});">Add Notes</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
     <script src='js/moment.min.js'></script>
 
     <!-- jQuery Version 1.11.0 -->
     <script src="js/jquery-1.11.0.js"></script>
-    <script src="js/jquery-ui.custom.min.js"></script>
+    <script src="js/jquery-ui.min.js" type="text/javascript"></script>
 
     <!-- allow users to download tables as csv and excel -->
     <script src="js/excellentexport.min.js"></script>
@@ -993,6 +1164,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                 '<span style="display: relative; width:50px; height:50px; border: 1px solid white; margin-top: 10px;margin-right: 10px; border-radius: 3px; background-color: ' + projects[i].color + '" class="pull-right"></span>' +
                 '<h3 class="project-title">' + projects[i]['name'] + '</h3>' +
                 '<p class="project-description">' + projects[i]['description'] + '</p>' +
+                '<p class="project-irb">' + projects[i]['irb'] + '</p>' +
                 '<div class="project-scan-time-left">scan time left: ' + (projects[i].scantime.initial-projects[i].scantime.current) + 'h</div>' +
                 '<div class="project-available-sessions">approx. sessions left: ' + Math.floor((projects[i].scantime.initial-projects[i].scantime.current)/projects[i].timeperscan) + '</div>' +
                 '</div>');
@@ -1051,6 +1223,9 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         jQuery('#datetimepicker1').prop('disabled', true);
         jQuery('#datetimepicker2').prop('disabled', true);
         jQuery('#add-event-referring').prop('disabled', true);
+        jQuery('#add-event-notes').prop('disabled', true);
+        jQuery('#add-event-protocol').prop('disabled', true);
+        jQuery('#add-event-section').prop('disabled', true);
         jQuery('#add-event-start-time').prop('disabled', true);
         jQuery('#add-event-end-time').prop('disabled', true);
       } else {
@@ -1062,6 +1237,9 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
         jQuery('#datetimepicker1').prop('disabled', false);
         jQuery('#datetimepicker2').prop('disabled', false);
         jQuery('#add-event-referring').prop('disabled', false);
+        jQuery('#add-event-notes').prop('disabled', false);
+        jQuery('#add-event-protocol').prop('disabled', true);
+        jQuery('#add-event-section').prop('disabled', true);
         jQuery('#add-event-start-time').prop('disabled', false);
         jQuery('#add-event-end-time').prop('disabled', false);
       }
@@ -1088,10 +1266,21 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
       }
       jQuery('#add-event-project-details').val(event.user);
       jQuery('#add-event-referring').val(event.referrer);
+      jQuery('#add-event-notes').val(event.notes);
+      jQuery('#add-event-protocol').val(event.protocol);
+      jQuery('#add-event-section').val(event.section);
       
       var cal = $('#calendar-loc').fullCalendar('getCalendar');
       var s = cal.moment(event.start).format();
       var e = cal.moment(event.end).format();
+
+      if (event.fullDay) {
+        jQuery('#add-event-fullday').prop('checked', true);
+	jQuery('#display-end-time').hide();
+      } else {
+        jQuery('#add-event-fullday').prop('checked', false); 
+	jQuery('#display-end-time').show();
+      }
 
       if (event.noshow == "true")
         jQuery('#add-event-noshow').prop('checked', true);
@@ -1164,7 +1353,8 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
             '&action=create&value=' + event.scantitle + '&value2=' + 
             encodeURIComponent(s) + '&value3=' + 
             encodeURIComponent(e) + '&value5=' + event.noshow +
-	    '&value6=' + event.referrer);
+	    '&value6=' + event.referrer +
+	    '&value7=' + event.notes + '&value8=' + event.protocol + '&value9=' + event.section);
         jQuery.getJSON(url, 
             function(data) { // returns the event id
                // alert('got something back: '+ data.message)
@@ -1229,7 +1419,7 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
             encodeURIComponent(s) + '&value3=' + 
             encodeURIComponent(e) + '&value4=' + 
             encodeURIComponent(event.eid) + '&value5=' +
-            event.noshow + '&value6=' + event.referrer);
+            event.noshow + '&value6=' + event.referrer + '&value7=' + event.notes + '&value8=' + event.protocol + '&value9=' + event.section);
         jQuery.getJSON(url,
             function(data) {
                // alert('got something back: '+ data.message)
@@ -1309,6 +1499,28 @@ function strTimeToMinutes(str_time) {
   return((hour * 60) + minutes);
 }
 
+function reloadReferring() {
+   jQuery('#referring-list').children().remove();
+   jQuery.getJSON('/code/php/getReferring.php', function( refs ) {
+     for (var i = 0; i < refs.length; i++) {
+        jQuery('#referring-list').append('<li><a href="#" onclick="jQuery(\'#add-event-referring\').val(\'' + refs[i] + '\');">' + refs[i] + ' <button class="delete-referrer fa fa-times pull-right" style="margin-top: -16px;"></button></a></li>');
+     }
+     jQuery('#add-event-referring').autocomplete({ source: refs });
+   });
+}
+
+function reloadNotes() {
+   jQuery('#notes-list').children().remove();
+   jQuery.getJSON('/code/php/getNotes.php', function( refs ) {
+     for (var i = 0; i < refs.length; i++) {
+        jQuery('#notes-list').append('<li><a href="#" onclick="jQuery(\'#add-event-notes\').val(\'' + refs[i] + '\');">' + refs[i] + ' <button class="delete-notes fa fa-times pull-right" style="margin-top: -16px;"></button></a></li>');
+     }
+     jQuery('#add-event-notes').autocomplete({ source: refs });
+   });
+}
+
+
+
 function setTimeline(view) {
   var parentDiv = $('.fc-slats:visible').parent();
   var timeline = parentDiv.children(".timelineCal");
@@ -1350,10 +1562,58 @@ function setTimeline(view) {
            updateHistogram();
         });
 
+        jQuery(document).on('click', '.protocol-selection', function(event) {
+	   event.preventDefault();
+           jQuery('#add-event-protocol').val( jQuery(this).text() );
+        });
+
+        jQuery(document).on('click', '.section-selection', function(event) {
+	   event.preventDefault();
+           jQuery('#add-event-section').val( jQuery(this).text() );
+        });
+
+	jQuery(document).on('click', '.delete-referrer', function(event) {
+	    event.preventDefault();
+            //console.log("press key for delete referrer is:" + jQuery(this).parent().text());
+            jQuery.get("/code/php/getReferring.php?action=remove&value="+jQuery(this).parent().text(), function() {
+	       reloadReferring();
+            });
+        });
+	jQuery(document).on('click', '.delete-notes', function(event) {
+	    event.preventDefault();
+            jQuery.get("/code/php/getNotes.php?action=remove&value="+jQuery(this).parent().text(), function() {
+	       reloadNotes();
+            });
+        });
+
 	jQuery.getJSON('/code/php/getReferring.php', function( refs ) {
 	   for (var i = 0; i < refs.length; i++) {
-	      jQuery('#referring-list').append('<li><a href="#" onclick="jQuery(\'#add-event-referring\').val(\'' + refs[i] + '\');">' + refs[i] + '</a></li>');
+	      jQuery('#referring-list').append('<li><a href="#" onclick="jQuery(\'#add-event-referring\').val(\'' + refs[i] + '\');">' + refs[i] + '<button class="delete-referrer fa fa-times pull-right" style="margin-top: -16px;"></button></a></li>');
            }
+	   jQuery('#add-event-referring').autocomplete({ source: refs });
+           jQuery('#add-event-referring').on('change', function() {
+	      return (function(refs) {
+	        if (refs.indexOf(jQuery('#add-event-referring').val()) == -1) {
+   	          // alert('entry not found, do you want to add it?  ' + refs.join('-'));
+		  jQuery('#save-new-referrer').modal('show');
+                }
+              })( refs );
+           });
+        });
+
+	jQuery.getJSON('/code/php/getNotes.php', function( refs ) {
+	   for (var i = 0; i < refs.length; i++) {
+	      jQuery('#notes-list').append('<li><a href="#" onclick="jQuery(\'#add-event-notes\').val(\'' + refs[i] + '\');">' + refs[i] + '<button class="delete-notes fa fa-times pull-right" style="margin-top: -16px;"></button></a></li>');
+           }
+	   jQuery('#add-event-notes').autocomplete({ source: refs });
+           jQuery('#add-event-notes').on('change', function() {
+	      return (function(refs) {
+	        if (refs.indexOf(jQuery('#add-event-notes').val()) == -1) {
+   	          // alert('entry not found, do you want to add it?  ' + refs.join('-'));
+		  jQuery('#save-new-notes').modal('show');
+                }
+              })( refs );
+           });
         });
 
         jQuery('#datetimepicker1').datetimepicker({language: 'en' });
@@ -1513,13 +1773,16 @@ console.log(i);
               });
 	      
 	      str = '<table id=table-admin-report class=\"report-table\">' +
-			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>AccessionNumber</th><th>ReferringPhysician</th><th>StudyInstanceUID</th></tr></thead>" +
+			    "<thead><tr><th>Nr</th><th>PatientID</th><th>PatientName</th><th>StudyDate</th><th>StudyTime</th><th>StudyDescription</th><th>AccessionNumber</th><th>ReferringPhysician</th><th>Notes</th><th>Protocol</th><th>Section</th><th>StudyInstanceUID</th></tr></thead>" +
 			    "<tbody>";
               for (var i = scans.length-1; i >= 0; i--) {
 		 str = str + "<tr><td>" + i + "</td><td>" + scans[i].PatientID + "</td><td>" + scans[i].PatientName + "</td><td>" +
 				  scans[i].StudyDate + "</td><td>" + scans[i].StudyTime + "</td><td>" + scans[i].StudyDescription + "</td><td>" 
 				  + scans[i].AccessionNumber + "</td><td>"
 				  + scans[i].ReferringPhysician + "</td><td>"
+				  + scans[i].Notes + "</td><td>"
+				  + scans[i].Protocol + "</td><td>"
+				  + scans[i].Section + "</td><td>"
 				  + scans[i].StudyInstanceUID + "</td></tr>";
               }
               str = str + '</tbody></table>';
@@ -1574,19 +1837,37 @@ console.log(i);
                    event.user    = data[i].user;
                    event.eid     = data[i].eid; // event id
 	           event.noshow  = data[i].noshow;
-	           event.referrer= data[i].referrer;
+		   if (typeof data[i].notes == 'undefined') {
+		       event.notes = "";
+		   } else {
+		     event.notes   = data[i].notes;
+                   }
+                   if (typeof data[i].protocol == 'undefined') {
+                      event.protocol = "";
+                   } else {
+		      event.protocol= data[i].protocol;
+		   }
+                   if (typeof data[i].section == 'undefined') {
+                      event.section = "";
+                   } else {
+		      event.section = data[i].section;
+		   }
+		   if (typeof data[i].referrer == 'undefined') {
+                      event.referrer = "";
+		   } else {
+  	              event.referrer= data[i].referrer;
+		   }
 
 		   if (i==0) {
                      startMonth = moment(event.start).startOf('month');
 		     sumPerMonth = 0;
 		     var firstOfThisMonth = moment(event.start).startOf('month');
-		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                              '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Referrer</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
-				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
 	             str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
 	             str = str + "&nbsp;|&nbsp;";
 	             str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
-		     jQuery('#report').append(str);
+		     jQuery('<table id=table-'+ countMonths +' class=\"report-table\">' +
+                            '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Notes</th><th>Protocol</th><th>Section</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+			    '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>').after(str).append('#report');
                    }
                    if (event.project !== project_name)
                       continue;
@@ -1597,22 +1878,27 @@ console.log(i);
                      if ( moment(firstOfThisMonth).diff(startMonth, 'months') !== 0 ) {
   		        sumPerMonth = 0;
 			countMonths++;
-                        // add a new table
-			jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                                 '<thead><tr><th>Nr</th><th>Title</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
-				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
  	                str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
  	                str = str + "&nbsp;|&nbsp;";
 	                str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
-		        jQuery('#report').append(str);
+
+                        // add a new table
+			jQuery('<table id=table-'+ countMonths +' class=\"report-table\">' +
+                                                 '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Notes</th><th>Protocol</th><th>Section</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>').after(str).prependTo('#report');
 			startMonth = moment(event.start).startOf('month');
                      }           
                    }
 
                    if (crossNow == false && moment().diff(event.end) < 0) {
                      crossNow = true;
-                     jQuery('#table-'+ countMonths +' tbody').append( '<tr><td>' 
+                     jQuery('#table-'+ countMonths +' tbody').append( '<tr style="background: #AA8888;"><td>' 
                         + '</td><td>' + "<i>TODAY</i>"
+                        + '</td><td>'
+                        + '</td><td>'
+                        + '</td><td>'
+                        + '</td><td>'
+                        + '</td><td>'
                         + '</td><td>'
                         + '</td><td>' + moment().format() 
                         + '</td><td>'
@@ -1625,18 +1911,21 @@ console.log(i);
                    noshowstr = "";
                    if (typeof(event.noshow) != 'undefined' && event.noshow == 'true')
                       noshowstr = " (no-show)";
-                   jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count 
-                        + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
+                   jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count + '</td><td>' + event.project
+                        + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"								       
+			+ '</td><td>' + event.referrer					   
+			+ '</td><td>' + event.notes   
+			+ '</td><td>' + event.protocol 
+			+ '</td><td>' + event.section 
                         + '</td><td>' + duration + noshowstr
                         + '</td><td>' + event.start.format() + "<br/>" + event.end.format()
-			+ '</td><td>' + event.referrer					   
-                        + '</td><td>' + sum 
+                        + '</td><td>' + sum.toFixed(2) 
                         + '</td></tr>' );
                    // find a scan that overlaps with this time period
                    for (var j = 0; j < scans.length; j++) {
 		      if ( scans[j].start.isAfter(event.start) && scans[j].start.isBefore(event.end) ) {
                         jQuery("#table-" + countMonths + " tbody").append( '<tr><td style="padding: 5px;">'
-                           + '</td><td colspan="4" style="padding: 5px;">' + scans[j].start.format() + " PatientID: " + scans[j].PatientID + " PatientName: " + scans[j].PatientName + " SIUID: " + scans[j].SeriesInstanceUID
+                           + '</td><td colspan="9" style="padding: 5px;">' + scans[j].start.format() + " PatientID: " + scans[j].PatientID + " PatientName: " + scans[j].PatientName + " SIUID: " + scans[j].StudyInstanceUID
                            + '</td></tr>' );
                       }
                    }
@@ -1689,19 +1978,37 @@ console.log(i);
                    event.user    = data[i].user;
                    event.eid     = data[i].eid; // event id
 	           event.noshow  = data[i].noshow;
-		   event.referrer= data[i].referrer;
-
+                   if (typeof data[i].referrer == 'undefined') {
+		       event.referrer = "";
+                   } else {
+  		       event.referrer= data[i].referrer;
+                   }
+	           if (typeof data[i].notes == 'undefined') {
+  		      event.notes  = "";
+                   } else {
+  		      event.notes  = data[i].notes;
+                   }
+                   if (typeof data[i].protocol == 'undefined') { 
+		     event.protocol= "";
+                   } else {
+  		     event.protocol= data[i].protocol;
+		   }
+                   if (typeof data[i].section == 'undefined') { 
+		     event.section = "";
+                   } else {
+  		     event.section = data[i].section;
+		   }
 		   if (i==0) {
                      startMonth = moment(event.start).startOf('month');
 		     sumPerMonth = 0;
 		     var firstOfThisMonth = moment(event.start).startOf('month');
-		     jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                              '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
-				              '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
 	             str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
 	             str = str + "&nbsp;|&nbsp;";
 	             str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
-		     jQuery('#report').append(str);
+
+		     jQuery('<table id=table-'+ countMonths +' class=\"report-table\">' +
+                            '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Notes</th><th>Duration (hours)</th><th>Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+			    '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>').after(str).append('#report');
                    }
                    //if (event.project !== project_name)
                    //   continue;
@@ -1712,22 +2019,27 @@ console.log(i);
                      if ( moment(firstOfThisMonth).diff(startMonth, 'months') !== 0 ) {
   		        sumPerMonth = 0;
 			countMonths++;
-                        // add a new table
-			jQuery('#report').append('<table id=table-'+ countMonths +' class=\"report-table\">' +
-                                                 '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
-				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>');
+
  	                str = '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.xls" href="#" onclick="return ExcellentExport.excel(this, \'table-' + countMonths + '\', \'Month Summary ' + moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to Excel</a>';
  	                str = str + "&nbsp;|&nbsp;";
 	                str = str + '<a download="monthSummary-' + moment(firstOfThisMonth).format('MMM_YYYY') + '.csv" href="#" onclick="return ExcellentExport.csv(this, \'table-' + countMonths + '\', \'Month Summary '+ moment(firstOfThisMonth).format('MMM_YYYY') + '\');">Export to CSV</a>';
-		        jQuery('#report').append(str);
+
+                        // add a new table
+			jQuery('<table id=table-'+ countMonths +' class=\"report-table\">' +
+                                                 '<thead><tr><th>Nr</th><th>Project</th><th>Title</th><th>Referrer</th><th>Notes</th><th>Protocol</th><th>Section</th><th>Duration (hours)</th><th title=\"In coordinated universal time (UTC).\">Start/End '+ moment(firstOfThisMonth).format('MMM YYYY') +'</th><th>Total (hours)</th></tr></thead><tbody></tbody></table>' +
+				                 '<div>Summary for '+ moment(firstOfThisMonth).format('MMM YYYY') +': <span id=\"summary-' + countMonths + '\"></span>hours</div>').after(str).prependTo('#report');
 			startMonth = moment(event.start).startOf('month');
                      }           
                    }
 
                    if (crossNow == false && moment().diff(event.end) < 0) {
                      crossNow = true;
-                     jQuery('#table-'+ countMonths +' tbody').append( '<tr><td></td>'
+                     jQuery('#table-'+ countMonths +' tbody').prepend( '<tr style="background: #AA8888;"><td></td>'
                         + '</td><td>' + "<i>TODAY</i>"
+                        + '</td><td>'
+                        + '</td><td>'
+                        + '</td><td>'
+                        + '</td><td>'
                         + '</td><td>'
                         + '</td><td>'
                         + '</td><td>' + moment().format() 
@@ -1741,18 +2053,21 @@ console.log(i);
                    noshowstr = "";
                    if (typeof(event.noshow) != 'undefined' && event.noshow == 'true')
                       noshowstr = " (no-show)";
-                   jQuery("#table-" + countMonths + " tbody").append( '<tr><td>' + count + '</td><td>' + event.project
-                        + '</td><td>' + data[i].scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
-			+ '</td><td>' + data[i].referrer				
+                   jQuery("#table-" + countMonths + " tbody").prepend( '<tr><td>' + count + '</td><td>' + event.project
+                        + '</td><td>' + event.scantitle + "<br/><span class=\"text-muted\">(" + data[i].user + ")</span>"
+			+ '</td><td>' + event.referrer				
+			+ '</td><td>' + event.notes				
+			+ '</td><td>' + event.protocol
+			+ '</td><td>' + event.section
                         + '</td><td>' + duration + noshowstr
                         + '</td><td>' + event.start.format() + "<br/>" + event.end.format() 
-                        + '</td><td>' + sum 
+                        + '</td><td>' + sum.toFixed(2) 
                         + '</td></tr>' );
                    // find a scan that overlaps with this time period
                    for (var j = 0; j < scans.length; j++) {
 		      if ( scans[j].start.isAfter(event.start) && scans[j].start.isBefore(event.end) ) {
-                        jQuery("#table-" + countMonths + " tbody").append( '<tr><td style="padding: 5px;">'
-                           + '</td><td colspan="5" style="padding: 5px;">' + scans[j].start.format() + " PatientID: " + scans[j].PatientID + " PatientName: " + scans[j].PatientName + " SIUID: " + scans[j].StudyInstanceUID
+                        jQuery("#table-" + countMonths + " tbody").prepend( '<tr><td style="padding: 5px;">'
+                           + '</td><td colspan="9" style="padding: 5px;">' + scans[j].start.format() + " PatientID: " + scans[j].PatientID + " PatientName: " + scans[j].PatientName + " SIUID: " + scans[j].StudyInstanceUID
                            + '</td></tr>' );
                       }
                    }
@@ -1795,7 +2110,11 @@ console.log(i);
            ev.scantitle = jQuery('#add-event-name').val();
            ev.title = ev.project + ": " + ev.scantitle;
            ev.noshow = jQuery('#add-event-noshow').prop('checked');
+           ev.fullDay = jQuery('#add-event-fullday').prop('checked');
 	   ev.referrer = jQuery('#add-event-referring').val();
+	   ev.notes   = jQuery('#add-event-notes').val();
+	   ev.protocol = jQuery('#add-event-protocol').val();
+	   ev.section = jQuery('#add-event-section').val();
            // ev.eid   = jQuery('#delete-event-button').data('eid');
 
            for (var i = 0; i < projectList.length; i++) {
@@ -1895,6 +2214,10 @@ console.log(i);
             selectable: true,
             selectHelper: true,
             select: function(start, end) {
+				     
+		// is this a full day event?
+		var fullDay = !start.hasTime() && !end.hasTime();
+		console.log("fullday: " + fullDay);
 
                 if (projectList.length == 0) {
                     // user does not have any events
@@ -1906,11 +2229,15 @@ console.log(i);
                     title: projectList[0].name, // pick the first project
                     project: projectList[0].name, // pick the first project
                     start: start,
-                    end: end
+                    end: end,
+		    fullDay: fullDay
                 };
                 jQuery('#calendar-loc').fullCalendar('unselect');
                 jQuery('#add-event-name').val("");
                 jQuery('#add-event-referring').val("");
+                jQuery('#add-event-notes').val("");
+                jQuery('#add-event-protocol').val("");
+                jQuery('#add-event-section').val("");
                 specifyEvent( eventData );
             },
             eventRender: function (event, element) {
@@ -2024,6 +2351,7 @@ console.log(i);
               // collect the information from the form
               var name        = jQuery('#project-name').val();
               var description = jQuery('#project-description').val();
+              var irb         = jQuery('#project-irbprotocol').val();
               var scantime    = jQuery('#project-scantime').val();
               var timeperscan = jQuery('#project-scan-duration').val()/60; // now in hours
               var color       = jQuery('#colorselector option:selected').attr('data-color');
@@ -2031,7 +2359,8 @@ console.log(i);
                              encodeURIComponent(description) + 
                              '&value3=' + encodeURIComponent(scantime) +
                              '&value4=' + encodeURIComponent(timeperscan) +
-                             '&value5=' + encodeURIComponent(color), function(data) {
+                             '&value5=' + encodeURIComponent(color) +
+		             '&value6=' + encodeURIComponent(irb), function(data) {
                   //console.log('created new project');
                   jQuery.getJSON('/code/php/getProjects.php', function(data) {
                     addProjects(data);

@@ -125,8 +125,8 @@
     }
     if (count($vals) == 8 ) {
        $accessionNumber=$vals[5];
-       $studyDescription=$vals[6];
-       $referringPhysician=$vals[7];  
+       $studyDescription=$vals[7];
+       $referringPhysician=$vals[6];
     }
 
     $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'StudyInstanceUID' => $siuid, 
