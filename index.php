@@ -72,7 +72,11 @@
     if (check_permission( "can-qc" )) {
        $can_qc = true;
     }
-    echo('<script type="text/javascript"> admin = '.($admin?"true":"false").'; can_qc = '.($can_qc?"true":"false").'; </script>');
+    $can_order = false;
+    if (check_permission( "can-order" )) {
+       $can_order = true;
+    }
+    echo('<script type="text/javascript"> admin = '.($admin?"true":"false").'; can_qc = '.($can_qc?"true":"false").'; can_order = '.($can_order?"true":"false").';</script>');
 
     // get the user information
     $us = list_user_contacts();
@@ -119,7 +123,10 @@
                         <a href="#page-top"></a>
                     </li>
                     <li>
-                        <a class="page-scroll" href="#calendar">Order</a>
+                        <a class="page-scroll" href="#calendar">Calendar</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="/applications/order.php">Order</a>
                     </li>
                     <li>
                         <a class="page-scroll" href="#projects">Projects</a>
@@ -239,6 +246,9 @@
                     <center><div id='calendar-loc' class="row"></div></center>
                 </div>
             </div>
+        </div>
+        <div class="container-fluid">
+            <div class="row-fluid" id="to-schedule"></div>
         </div>
     </section>
 
@@ -587,6 +597,26 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                                 </div>
                               </div>
                               <div class="form-group has-feedback">
+                                <label class="control-label col-sm-3" for="add-event-section" title="Responsible study section">Section</label>
+                                <div class="col-sm-9">
+				  <div class="input-group">
+				     <div class="input-group-btn">
+				       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
+				       <ul class="dropdown-menu dropdown-menu-right multi-level" role="menu" id="section-list">
+					  <li><a class="section-selection" href="#">Cardiovascular</a></li>
+					  <li><a class="section-selection" href="#">MSK</a></li>
+					  <li><a class="section-selection" href="#">Abdomen/Pelvis</a></li>
+					  <li><a class="section-selection" href="#">Breast</a></li>
+					  <li><a class="section-selection" href="#">Head</a></li>
+					  <li><a class="section-selection" href="#">Neck</a></li>
+					  <li><a class="section-selection" href="#">WholeBody</a></li>
+				       </ul>
+				     </div>
+				     <input type="text" class="form-control" aria-label="..." id="add-event-section">
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="form-group has-feedback">
                                 <label class="control-label col-sm-3" for="add-event-protocol">Protocol</label>
                                 <div class="col-sm-9">
 				  <div class="input-group">
@@ -689,25 +719,6 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
                                 </div>
                               </div>
                               <div class="form-group has-feedback">
-                                <label class="control-label col-sm-3" for="add-event-section" title="Responsible study section">Section</label>
-                                <div class="col-sm-9">
-				  <div class="input-group">
-				     <div class="input-group-btn">
-				       <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Select <span class="caret"></span></button>
-				       <ul class="dropdown-menu dropdown-menu-right multi-level" role="menu" id="section-list">
-					  <li><a class="section-selection" href="#">Cardiovascular</a></li>
-					  <li><a class="section-selection" href="#">MSK</a></li>
-					  <li><a class="section-selection" href="#">Abdomen/Pelvis</a></li>
-					  <li><a class="section-selection" href="#">Breast</a></li>
-					  <li><a class="section-selection" href="#">Head</a></li>
-					  <li><a class="section-selection" href="#">WholeBody</a></li>
-				       </ul>
-				     </div>
-				     <input type="text" class="form-control" aria-label="..." id="add-event-section">
-                                  </div>
-                                </div>
-                              </div>
-                              <div class="form-group has-feedback">
                                 <label class="control-label col-sm-3" for="add-event-start-time">Start Time</label>
                                 <div class="col-sm-9">
                                   <div class='input-group date' id='datetimepicker1'>
@@ -737,6 +748,11 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
 				  <div class="checkbox" style="display: none;">
   				    <label for="add-event-fullday">
                                        <input id="add-event-fullday" type="checkbox" value="">full day
+                                    </label>
+                                  </div>
+				  <div class="checkbox" style="display: none;" id="delete-prot-field">
+  				    <label for="add-event-delete-prot">
+                                       <input id="add-event-delete-prot" type="checkbox" value="">delete from protocol list
                                     </label>
                                   </div>
                                 </div>
@@ -1203,6 +1219,26 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
 
     }
 
+<?php if ($can_order) : ?>
+    function updateToProtocolList() {
+	jQuery('#to-schedule').children().remove();
+	jQuery.getJSON('/code/php/getProtocols.php', function (data) {
+	    data.sort(function(a,b) { return a.date - b.date; });
+	    str = "<H4>Unscheduled Orders</H4>";
+	    for (var i = 0; i < data.length; i++) {
+  	      str = str + "<div class=\"to-protocol col-lg-3\" protid=\"" + data[i].id + "\">";
+	      str = str + "  <div><span class='prot-name'>" + data[i].name + "</span> (<span class='prot-project'>" + data[i].project + "</span>)</div>";
+	      str = str + "  <div>Referring: <span class='prot-referring'>" + data[i].referring + "</span></div>";
+	      str = str + "  <div>Section: <span class='prot-section'>" + data[i].section + "</span></div>";
+	      str = str + "  <div>Protocol: <span class='prot-protocol'>" + data[i].protocol + "</span></div>";
+	      str = str + "  <div>(<span class='prot-notes'>" + data[i].notes + "</span>)</div>";
+              str = str + "</div>";
+            }
+	    jQuery('#to-schedule').append(str);
+        });
+    }
+<?php endif; ?>
+
     // project name, sets the string in the interface for the project details
     function updateScanTimeDisplay( pr ) {
             for (var i = 0; i < projectList.length; i++){
@@ -1214,6 +1250,13 @@ UC San Diego Center for Translational Imaging and Personalized Medicine collects
     }
 
     function specifyEvent( event ) {
+      if (typeof event.showProtDel != 'undefined' && event.showProtDel) {
+	  // display the checkbox
+	  jQuery('#delete-prot-field').css('display', '');
+	  jQuery('#delete-prot-field').attr('protid', event.protID);
+      } else {
+	  jQuery('#delete-prot-field').css('display', 'none');
+      }
       if (!eventEditable(event).ok) {
         jQuery('#add-event-message').html("This event cannot be edited because " + eventEditable(event).message + ".");
         jQuery('#add-event-project-name').prop('disabled', true);
@@ -1560,6 +1603,18 @@ function setTimeline(view) {
        jQuery(document).ready(function() {
 	jQuery(window).resize(function() {
            updateHistogram();
+        });
+
+<?php if ($can_order) : ?>
+	updateToProtocolList();
+<?php endif; ?>
+
+	jQuery('#to-schedule').on('click', '.to-protocol', function(ev) {
+	    if (jQuery(this).hasClass('highlight')) {
+   	      jQuery('#to-schedule').children().removeClass('highlight');
+            } else {
+   	      jQuery(this).addClass('highlight').siblings().removeClass('highlight');
+            }
         });
 
         jQuery(document).on('click', '.protocol-selection', function(event) {
@@ -1917,7 +1972,7 @@ console.log(i);
 			+ '</td><td>' + event.notes   
 			+ '</td><td>' + event.protocol 
 			+ '</td><td>' + event.section 
-                        + '</td><td>' + duration + noshowstr
+                        + '</td><td>' + duration.toFixed(2) + noshowstr
                         + '</td><td>' + event.start.format() + "<br/>" + event.end.format()
                         + '</td><td>' + sum.toFixed(2) 
                         + '</td></tr>' );
@@ -2059,7 +2114,7 @@ console.log(i);
 			+ '</td><td>' + event.notes				
 			+ '</td><td>' + event.protocol
 			+ '</td><td>' + event.section
-                        + '</td><td>' + duration + noshowstr
+                        + '</td><td>' + duration.toFixed(2) + noshowstr
                         + '</td><td>' + event.start.format() + "<br/>" + event.end.format() 
                         + '</td><td>' + sum.toFixed(2) 
                         + '</td></tr>' );
@@ -2148,6 +2203,16 @@ console.log(i);
                  jQuery('#calendar-loc').fullCalendar('refetchEvents');
               }
            }
+
+	   // after we save an event - and it came from the protocol-list, we need to delete it from that list
+	   if ( jQuery('#add-event-delete-prot').prop('checked') ) {
+	       // id is
+	       var id = jQuery('#delete-prot-field').attr('protid');
+	       jQuery.getJSON('/code/php/getProtocols.php?action=remove&id=' + id, function(data) {
+		   console.log('deleted protocol with id ' + id);
+               });
+           }
+           setTimeout(function() { reloadProtocols(); }, 100);
         });
 
           jQuery('#calendar-loc').fullCalendar({
@@ -2233,11 +2298,37 @@ console.log(i);
 		    fullDay: fullDay
                 };
                 jQuery('#calendar-loc').fullCalendar('unselect');
-                jQuery('#add-event-name').val("");
-                jQuery('#add-event-referring').val("");
-                jQuery('#add-event-notes').val("");
-                jQuery('#add-event-protocol').val("");
-                jQuery('#add-event-section').val("");
+		var prot = jQuery('#to-schedule div.highlight');
+                if (prot.length) {
+   		  console.log("if we have a protocol selected, use that one ");
+		  var name = jQuery(prot).find('div .prot-name').text();
+		  var project = jQuery(prot).find('div .prot-project').text();
+		  var referring = jQuery(prot).find('div .prot-referring').text();
+		  var notes = jQuery(prot).find('div .prot-notes').text();
+		  var section = jQuery(prot).find('div .prot-section').text();
+		  var protocol = jQuery(prot).find('div .prot-protocol').text();
+                  jQuery('#add-event-name').val( name );
+		  console.log('referring is : ' + jQuery(prot).find('div .prot-referring').text());
+                  jQuery('#add-event-referring').val( referring );
+                  jQuery('#add-event-notes').val(  notes );
+                  jQuery('#add-event-protocol').val( protocol );
+                  jQuery('#add-event-section').val( section );
+		  eventData.title     = name;
+		  eventData.scantitle = name;
+		  eventData.project   = project;
+		  eventData.referrer  = referring;
+		  eventData.section   = section;
+		  eventData.notes     = notes;
+		  eventData.protocol  = protocol;
+                  eventData.showProtDel = true;
+		  eventData.protID    = jQuery(prot).attr('protid');
+                } else {
+                  jQuery('#add-event-name').val("");
+                  jQuery('#add-event-referring').val("");
+                  jQuery('#add-event-notes').val("");
+                  jQuery('#add-event-protocol').val("");
+                  jQuery('#add-event-section').val("");
+                }
                 specifyEvent( eventData );
             },
             eventRender: function (event, element) {
@@ -2316,7 +2407,15 @@ console.log(i);
                 },
 	        {
 	            title: 'Christmas Day',
+		    start: '2015-12-24'
+                },
+	        {
+	            title: 'Christmas Day',
 		    start: '2015-12-25'
+                },
+	        {
+	            title: 'New Year\'s Eve',
+		    start: '2015-12-31'
                 }
             ] ]
             // put your options and callbacks here

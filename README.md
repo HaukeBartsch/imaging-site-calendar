@@ -11,10 +11,11 @@ Features include:
 5. Project summary view with time already spend and time still availabe
 6. Project report page with monthy sorted booking times and actual scans performed
 7. Contact form sends email to maintainer
+8. Order workflow
 
 ## Screenshots
 
-Here is a screenshot of the application. "Order" is a calendar view. "Projects" a list of the current users projects with links to project reports. "Contact" allows users to send an email in order to request help.
+Here is a screenshot of the application. "Calendar" is a calendar view. "Projects" a list of the current users projects with links to project reports. "Contact" allows users to send an email in order to request help. 
 
 ![application screenshot](https://github.com/HaukeBartsch/imaging-site-calendar/blob/master/img/CalendarApp.png "Calendar App Screenshot")
 
@@ -26,3 +27,6 @@ The report page is availabel for each project and lists all booked times as well
 
 ![report screenshot](https://github.com/HaukeBartsch/imaging-site-calendar/blob/master/img/Report.png "Calendar App Screenshot for Report Page")
 
+## Workflow
+
+This application supports a workflow similar to a RIS (radiology information system). A radiologist will create an order for a patient that includes the type of scan, contact information for the patient and notes that indicate patient specific modifications to the the scan. A front-desk scheduler picks up these orders, calls the patient and schedules a time for the scan to be performed. The MR technician on the scanner performs the specified scan as soon as the patient arrives.
