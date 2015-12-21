@@ -131,7 +131,7 @@
 
     $d[] = array('PatientID' => $patientid, 'PatientName' => $patientname, 'StudyDate' => $studydate, 'StudyTime' => $studytime, 'StudyInstanceUID' => $siuid, 
     	         'AccessionNumber' => $accessionNumber, 'ReferringPhysician' => $referringPhysician, 'StudyDescription' => $studyDescription );
- 
+    audit("create scan", " -> patientid: ".$patientid); 
     saveScans($d);
 
     echo (json_encode( array( 'message' => 'scan added', "ok" => 1)));
