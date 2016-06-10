@@ -1,0 +1,33 @@
+[
+    {
+        "name": "TEST",
+        "description": "A test project",
+        "scantime": {
+            "initial": "200",
+            "current": 0
+        },
+        "users": [
+            "admin",
+            "hauke"
+        ],
+        "timeperscan": "0.75",
+        "color": "#CDCDCD"
+    },
+    {
+        "name": "TESTProject",
+        "description": "A test project",
+        "scantime": {
+            "initial": "1000",
+            "current": 0
+        },
+        "users": [
+            "hauke"
+        ],
+        "admin": [
+            "hauke"
+        ],
+        "timeperscan": "1",
+        "color": "#CD5C5C",
+        "irb": "RADMTAG"
+    }
+]
